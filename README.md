@@ -2,6 +2,10 @@
 
 Configurator provides a GUI interface for your application, dynamically generated from a JSON file.
 
+## Screenshot
+
+![Configurator](https://raw.githubusercontent.com/ipv6rslimited/configurator/main/screenshot.png)
+
 ## Features
 
 - Custom GUI Dialog Generation from JSON
