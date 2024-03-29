@@ -1,0 +1,39 @@
+{
+  "Header": "Title",
+  "Entries": [
+    {
+      "VariableName": "NAME",
+      "Question": "What's your name?",
+      "CanBeNull": false,
+      "AcceptableAnswers": [],
+      "Type":"string",
+      "Placeholder": "Enter name"
+    },
+    {
+      "VariableName": "PASS",
+      "Question": "What's your password?",
+      "CanBeNull": false,
+      "AcceptableAnswers": [],
+      "Type":"password",
+      "Placeholder": "Enter pass"
+    },
+    {
+      "VariableName": "COOL",
+      "Question": "Are you cool?",
+      "CanBeNull": false,
+      "Type":"string",
+      "AcceptableAnswers": ["Y", "N"],
+      "Placeholder": "Choose Yes or No"
+    },
+    {
+      "VariableName": "FILE",
+      "Question": "Filename:",
+      "CanBeNull": false,
+      "Type":"string",
+      "AcceptableAnswers": ["json"],
+      "Placeholder": "FILEPICKER"
+    }
+  ],
+  "SubmitButtonText": "Create",
+  "exec": "example.sh"
+}
