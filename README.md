@@ -6,6 +6,58 @@ Configurator provides a GUI interface for your application, dynamically generate
 
 ![Configurator](https://raw.githubusercontent.com/ipv6rslimited/configurator/main/screenshot.png)
 
+This was generated from:
+
+```
+{
+  "Header": "Title",
+  "Entries": [
+    {
+      "VariableName": "NAME",
+      "Question": "What's your name?",
+      "CanBeNull": false,
+      "AcceptableAnswers": [],
+      "Type":"string",
+      "Placeholder": "Enter name"
+    },
+    {
+      "VariableName": "PASS",
+      "Question": "What's your password?",
+      "CanBeNull": false,
+      "AcceptableAnswers": [],
+      "Type":"password",
+      "Placeholder": "Enter pass"
+    },
+    {
+      "VariableName": "COOL",
+      "Question": "Are you cool?",
+      "CanBeNull": false,
+      "Type":"string",
+      "AcceptableAnswers": ["Y", "N"],
+      "Placeholder": "Choose Yes or No"
+    },
+    {
+      "VariableName": "FILE",
+      "Question": "Filename:",
+      "CanBeNull": false,
+      "Type":"string",
+      "AcceptableAnswers": ["json"],
+      "Placeholder": "FILEPICKER"
+    }
+  ],
+  "SubmitButtonText": "Create",
+  "exec": "example.sh"
+}
+```
+
+It will call example.sh, wherein, the variables will be automatically filled in and usable.
+
+```
+#!/bin/bash
+echo _NAME _PASS _COOL _FILE
+```
+
+
 ## Features
 
 - Custom GUI Dialog Generation from JSON
