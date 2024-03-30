@@ -304,11 +304,13 @@ func executeInTerminal(scriptFilename string) error {
 
   switch runtime.GOOS {
     case "windows":
-      cmd = exec.Command("powershell", "-NoExit", "-ExecutionPolicy", "Bypass", "-File", scriptFilename)
+      commandStr := fmt.Sprintf("& '%s'; Remove-Item -Path '%s'", scriptFilename, scriptFilename)
+      cmd = exec.Command("powershell", "-NoExit", "-ExecutionPolicy", "Bypass", "-Command", commandStr)
     case "darwin":
       cmd = exec.Command("osascript", "-e", fmt.Sprintf(`tell application "Terminal" to do script "sh %s && rm %s"`, scriptFilename, scriptFilename))
     case "linux":
-      cmd = exec.Command("gnome-terminal", "--", "bash", "-c", fmt.Sprintf(`%s; exec bash`,scriptFilename))
+      cmd = exec.Command("gnome-terminal", "--", "bash", "-c", fmt.Sprintf(`%s; rm %s; exec bash`, scriptFilename, scriptFilename))
+
     default:
       fmt.Errorf("unsupported platform")
   }
