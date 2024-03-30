@@ -333,32 +333,26 @@ func expandPath(path string) string {
     }
     return homeDir
   }
-
   if strings.HasPrefix(path, "~/") || strings.HasPrefix(path, "$HOME/") {
     homeDir, err := os.UserHomeDir()
     if err != nil {
       fmt.Println("Unable to determine the home directory:", err)
       return path
     }
-
-    var baseDir string
+    var newPath string
     if runtime.GOOS == "windows" && (strings.HasPrefix(path, "~/.") || strings.HasPrefix(path, "$HOME/.")) {
       localAppData, exists := os.LookupEnv("LOCALAPPDATA")
       if !exists {
         fmt.Println("LOCALAPPDATA environment variable not set.")
         return path
       }
-      baseDir = localAppData
-      path = strings.TrimPrefix(path, "~/.")
-      path = strings.TrimPrefix(path, "$HOME/.")
+      newPath = strings.Replace(path, "~/.", localAppData+string(os.PathSeparator), 1)
+      newPath = strings.Replace(newPath, "$HOME/.", localAppData+string(os.PathSeparator), 1)
     } else {
-      baseDir = homeDir
-      path = strings.TrimPrefix(path, "~/")
-      path = strings.TrimPrefix(path, "$HOME/")
+      newPath = strings.Replace(path, "~/", homeDir+string(os.PathSeparator), 1)
+      newPath = strings.Replace(newPath, "$HOME/", homeDir+string(os.PathSeparator), 1)
     }
-    finalPath := strings.Join([]string{baseDir, path}, string(os.PathSeparator))
-    return strings.TrimPrefix(finalPath, string(os.PathSeparator))
+    return newPath
   }
   return path
 }
-
