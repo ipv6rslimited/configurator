@@ -99,6 +99,14 @@ func NewWindow(app fyne.App, arg string, linkText string, linkUrl string) {
       formItems.Add(label)
       formItems.Add(container.NewHBox(filePickerEntry, filePickerButton))
       formItems.Add(errorContainer)
+    } else if entry.Placeholder == "FOLDERPICKER" {
+      folderPickerEntry := widget.NewEntry()
+      folderPickerEntry.Disable()
+      folderPickerButton := makeFolderPickerButton(w, folderPickerEntry)
+      inputs[entry.VariableName] = folderPickerEntry
+      formItems.Add(label)
+      formItems.Add(container.NewHBox(folderPickerEntry, folderPickerButton))
+      formItems.Add(errorContainer)
     } else {
       var input fyne.CanvasObject
       if len(entry.AcceptableAnswers) > 0 {
@@ -144,7 +152,16 @@ func NewWindow(app fyne.App, arg string, linkText string, linkUrl string) {
 
   w.Show()
 }
-
+func makeFolderPickerButton(w fyne.Window, entry *widget.Entry) *widget.Button {
+  return widget.NewButton("Browse", func() {
+    dialog.ShowFolderOpen(func(uri fyne.ListableURI, err error) {
+      if uri != nil && err == nil {
+        entry.SetText(uri.Path())
+        entry.Refresh()
+      }
+    }, w)
+  })
+}
 func makeFilePickerButton(window fyne.Window, entry *widget.Entry, filters []string) *widget.Button {
   return widget.NewButton("Select File", func() {
     fileDialog := dialog.NewFileOpen(func(reader fyne.URIReadCloser, err error) {
