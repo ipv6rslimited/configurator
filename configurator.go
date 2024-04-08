@@ -304,8 +304,9 @@ func executeInTerminal(scriptFilename string) error {
 
   switch runtime.GOOS {
     case "windows":
-      commandStr := fmt.Sprintf("& '%s'; Remove-Item -Path '%s'", scriptFilename, scriptFilename)
-      cmd = exec.Command("powershell", "-NoExit", "-ExecutionPolicy", "Bypass", "-Command", commandStr)
+      escapedScriptFilename := strings.ReplaceAll(scriptFilename, `\`, `\\`)
+      psCommand := fmt.Sprintf("powershell -ExecutionPolicy Bypass -File \"%s\"; Remove-Item -Path \"%s\"", escapedScriptFilename, escapedScriptFilename)
+      cmd = exec.Command("cmd", "/C", "start", "PowerShell Script Window", "powershell", "-NoExit", "-Command", psCommand)
     case "darwin":
       cmd = exec.Command("osascript", "-e", fmt.Sprintf(`tell application "Terminal" to do script "sh %s && rm %s"`, scriptFilename, scriptFilename))
     case "linux":
@@ -317,7 +318,7 @@ func executeInTerminal(scriptFilename string) error {
 
   cmd.Stdout = os.Stdout
   cmd.Stderr = os.Stderr
-  err := cmd.Run()
+  err := cmd.Start()
   if err != nil {
     fmt.Errorf("Failed to execute command: %v", err)
     return err;
