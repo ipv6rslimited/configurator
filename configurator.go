@@ -50,8 +50,8 @@ type Entry struct {
   Placeholder       string   `json:"Placeholder"`
   Type              string   `json:"Type"`
   AllowedChars      string   `json:"AllowedChars,omitempty"`
-  MinLength         int      `json:"MinLength,omitempty"`
-  MaxLength         int      `json:"MaxLength,omitempty"`
+  MinLength         *int      `json:"MinLength,omitempty"`
+  MaxLength         *int      `json:"MaxLength,omitempty"`
 }
 
 func NewWindow(app fyne.App, arg string, linkText string, linkUrl string) {
@@ -211,11 +211,11 @@ func validateFormEntries(entries []Entry, inputs map[string]fyne.CanvasObject, e
     if !entry.CanBeNull && inputText == "" {
       errorLabel.Text = "This field cannot be empty"
       allValid = false
-    } else if len(inputText) < entry.MinLength {
-      errorLabel.Text = fmt.Sprintf("Minimum length of %d characters is required", entry.MinLength)
+    } else if entry.MinLength != nil && len(inputText) < *entry.MinLength {
+      errorLabel.Text = fmt.Sprintf("Minimum length of %d characters is required", *entry.MinLength)
       allValid = false
-    } else if len(inputText) > entry.MaxLength {
-      errorLabel.Text = fmt.Sprintf("Maximum length of %d characters is required", entry.MaxLength)
+    } else if entry.MaxLength != nil && len(inputText) > *entry.MaxLength {
+      errorLabel.Text = fmt.Sprintf("Maximum length of %d characters is required", *entry.MaxLength)
       allValid = false
     } else if !isValidType(inputText, entry.Type) {
       errorLabel.Text = fmt.Sprintf("Expecting a %s", entry.Type)
