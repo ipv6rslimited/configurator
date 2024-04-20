@@ -31,6 +31,7 @@ import (
   "runtime"
   "strconv"
   "strings"
+  "regexp"
 )
 
 
@@ -48,8 +49,10 @@ type Entry struct {
   AcceptableAnswers []string `json:"AcceptableAnswers"`
   Placeholder       string   `json:"Placeholder"`
   Type              string   `json:"Type"`
+  AllowedChars      string   `json:"AllowedChars,omitempty"`
+  MinLength         int      `json:"MinLength,omitempty"`
+  MaxLength         int      `json:"MaxLength,omitempty"`
 }
-
 
 func NewWindow(app fyne.App, arg string, linkText string, linkUrl string) {
   if(arg == "") {
@@ -186,7 +189,7 @@ func validateFormEntries(entries []Entry, inputs map[string]fyne.CanvasObject, e
   envVars := make(map[string]string)
   for _, entry := range entries {
     inputText := ""
-    if entry.Placeholder == "FILEPICKER" {
+    if entry.Placeholder == "FILEPICKER" || entry.Placeholder == "FOLDERPICKER" {
       inputText = inputs[entry.VariableName].(*widget.Entry).Text
     } else {
       switch input := inputs[entry.VariableName].(type) {
@@ -208,8 +211,17 @@ func validateFormEntries(entries []Entry, inputs map[string]fyne.CanvasObject, e
     if !entry.CanBeNull && inputText == "" {
       errorLabel.Text = "This field cannot be empty"
       allValid = false
+    } else if len(inputText) < entry.MinLength {
+      errorLabel.Text = fmt.Sprintf("Minimum length of %d characters is required", entry.MinLength)
+      allValid = false
+    } else if len(inputText) > entry.MaxLength {
+      errorLabel.Text = fmt.Sprintf("Maximum length of %d characters is required", entry.MaxLength)
+      allValid = false
     } else if !isValidType(inputText, entry.Type) {
       errorLabel.Text = fmt.Sprintf("Expecting a %s", entry.Type)
+      allValid = false
+    } else if entry.AllowedChars != "" && !regexp.MustCompile(entry.AllowedChars).MatchString(inputText) {
+      errorLabel.Text = "Input contains invalid characters"
       allValid = false
     } else {
       errorLabel.Text = ""

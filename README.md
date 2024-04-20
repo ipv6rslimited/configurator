@@ -68,6 +68,8 @@ echo _NAME _PASS _COOL _FILE
 
 - Runs a script with dynamic var replacement prior
 
+- Checks for null, regex and min/max length
+
 ## Use Case
 
 - We needed a dialog for our 1-click self hosting installer for [IPv6rs](https://ipv6.rs)
