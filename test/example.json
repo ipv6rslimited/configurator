@@ -31,7 +31,7 @@
     {
       "VariableName": "FILE",
       "Question": "Filename:",
-      "CanBeNull": false,
+      "CanBeNull": true,
       "Type":"string",
       "AcceptableAnswers": ["json"],
       "Placeholder": "FILEPICKER"
@@ -39,7 +39,7 @@
     {
       "VariableName": "FOLDER",
       "Question": "Folder:",
-      "CanBeNull": false,
+      "CanBeNull": true,
       "Type":"string",
       "AcceptableAnswers": [],
       "Placeholder": "FOLDERPICKER"

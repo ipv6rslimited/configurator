@@ -23,11 +23,11 @@ import (
   "fyne.io/fyne/v2/storage"
   "fyne.io/fyne/v2/widget"
   "fyne.io/fyne/v2/theme"
+  "github.com/ipv6rslimited/simpal"
   "image/color"
   "io/ioutil"
   "net/url"
   "os"
-  "os/exec"
   "runtime"
   "strconv"
   "strings"
@@ -133,8 +133,7 @@ func NewWindow(app fyne.App, arg string, linkText string, linkUrl string) {
   submitButton := NewResizableButton(config.SubmitButtonText, 140, func() {
     allValid, envVars := validateFormEntries(config.Entries, inputs, errors, errorContainers)
     if allValid {
-      executeCommand(config.Exec, envVars)
-      w.Close()
+      executeCommand(app, w, config.Header, config.Exec, envVars)
     }
   })
   submitButtonContainer := container.NewHBox(layout.NewSpacer(), submitButton)
@@ -274,9 +273,8 @@ func loadConfiguration(file string) (*Configuration, error) {
   return &config, nil
 }
 
-func executeCommand(scriptFilename string, envVars map[string]string) error {
+func executeCommand(app fyne.App, w fyne.Window, configHeader string, scriptFilename string, envVars map[string]string) error {
   scriptFilename = expandPath(scriptFilename)
-
 
   var scriptFile string;
   var extension string;
@@ -322,36 +320,35 @@ func executeCommand(scriptFilename string, envVars map[string]string) error {
     return err
   }
 
-  if err := executeInTerminal(tmpfile.Name()); err != nil {
+  if err := executeInTerminal(app, w, configHeader, tmpfile.Name()); err != nil {
     return err
   }
   return nil
 }
 
-func executeInTerminal(scriptFilename string) error {
-  var cmd *exec.Cmd
+func executeInTerminal(app fyne.App, w fyne.Window, configHeader string, scriptFilename string) error {
+  var cmd string
+
+  execWin := app.NewWindow(configHeader)
+  execWin.Resize(fyne.NewSize(800, 400))
 
   switch runtime.GOOS {
     case "windows":
       escapedScriptFilename := strings.ReplaceAll(scriptFilename, `\`, `\\`)
-      psCommand := fmt.Sprintf("powershell -ExecutionPolicy Bypass -File \"%s\"; Remove-Item -Path \"%s\"", escapedScriptFilename, escapedScriptFilename)
-      cmd = exec.Command("cmd", "/C", "start", "PowerShell Script Window", "powershell", "-NoExit", "-Command", psCommand)
+      cmd = fmt.Sprintf(`"%s"; Remove-Item -Path "%s"`, escapedScriptFilename, escapedScriptFilename)
     case "darwin":
-      cmd = exec.Command("osascript", "-e", fmt.Sprintf(`tell application "Terminal" to do script "sh %s && rm %s"`, scriptFilename, scriptFilename))
+      cmd = fmt.Sprintf("%s && rm %s", scriptFilename, scriptFilename)
     case "linux":
-      cmd = exec.Command("gnome-terminal", "--", "bash", "-c", fmt.Sprintf(`%s; rm %s; exec bash`, scriptFilename, scriptFilename))
+      cmd = fmt.Sprintf("%s; rm %s; exec bash", scriptFilename, scriptFilename)
 
     default:
       fmt.Errorf("unsupported platform")
   }
 
-  cmd.Stdout = os.Stdout
-  cmd.Stderr = os.Stderr
-  err := cmd.Start()
-  if err != nil {
-    fmt.Errorf("Failed to execute command: %v", err)
-    return err;
-  }
+  execWin.SetContent(simpal.NewTerminal(app, execWin, cmd))
+
+  execWin.Show()
+  w.Close()
 
   return nil;
 }
