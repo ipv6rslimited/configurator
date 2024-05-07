@@ -185,8 +185,8 @@ github.com/hashicorp/serf v0.8.2/go.mod h1:6hOLApaqBFA1NXqRQAsxw9QxuDEvNxSQRwA/J
 github.com/ianlancetaylor/demangle v0.0.0-20181102032728-5e5cf60278f6/go.mod h1:aSSvb/t6k1mPoxDqO4vJh6VOCGPwU4O0C2/Eqndh1Sc=
 github.com/ianlancetaylor/demangle v0.0.0-20200824232613-28f6c0f3b639/go.mod h1:aSSvb/t6k1mPoxDqO4vJh6VOCGPwU4O0C2/Eqndh1Sc=
 github.com/inconshreveable/mousetrap v1.0.0/go.mod h1:PxqpIevigyE2G7u3NXJIT2ANytuPF1OarO4DADm73n8=
-github.com/ipv6rslimited/simpal v1.0.1 h1:wFQxg0iHDAlHT1A2jlvXfA9HPYNwUOC4diM+kB1NLJs=
-github.com/ipv6rslimited/simpal v1.0.1/go.mod h1:DP/x0RT/S8NGWVKgPsIhOJ9DXXRkrW49ybELwLy/sJ8=
+github.com/ipv6rslimited/simpal v1.0.3 h1:/daH4ebNtCU/DybKi7o6HXNac1gGxK1yRelWifoc0Oc=
+github.com/ipv6rslimited/simpal v1.0.3/go.mod h1:DP/x0RT/S8NGWVKgPsIhOJ9DXXRkrW49ybELwLy/sJ8=
 github.com/json-iterator/go v1.1.11/go.mod h1:KdQUCv79m/52Kvf8AW2vK1V8akMuk1QjK/uOdHXbAo4=
 github.com/jstemmer/go-junit-report v0.0.0-20190106144839-af01ea7f8024/go.mod h1:6v2b51hI/fHJwM22ozAgKL4VKDeJcHhJFhtBdhmNjmU=
 github.com/jstemmer/go-junit-report v0.9.1/go.mod h1:Brl9GWCQeLvo8nXZwPNNblvFj/XSXhF0NWZEnDohbsk=

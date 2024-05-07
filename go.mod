@@ -4,7 +4,7 @@ go 1.22.2
 
 require fyne.io/fyne/v2 v2.4.5
 
-require github.com/ipv6rslimited/simpal v1.0.1
+require github.com/ipv6rslimited/simpal v1.0.3
 
 require (
 	github.com/ActiveState/termtest/conpty v0.5.0 // indirect
