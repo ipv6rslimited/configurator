@@ -335,7 +335,7 @@ func executeInTerminal(app fyne.App, w fyne.Window, configHeader string, scriptF
   switch runtime.GOOS {
     case "windows":
       escapedScriptFilename := strings.ReplaceAll(scriptFilename, `\`, `\\`)
-      cmd = fmt.Sprintf(`"%s"; Remove-Item -Path "%s"`, escapedScriptFilename, escapedScriptFilename)
+      cmd = fmt.Sprintf(`& {Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope Process -Force; & '%s'; Remove-Item -Path '%s'}`, escapedScriptFilename, escapedScriptFilename)
     case "darwin":
       cmd = fmt.Sprintf("%s && rm %s", scriptFilename, scriptFilename)
     case "linux":
